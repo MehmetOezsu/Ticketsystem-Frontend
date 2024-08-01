@@ -1,15 +1,31 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { Auth0Provider } from '@auth0/auth0-react';
 import './index.css';
 import App from './App';
-import { UserProvider } from './UserContext';  // Überprüfen Sie den Pfad
+import { UserProvider } from './UserContext';  // Pfad überprüfen
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <UserProvider>
-    <Router>
-      <App />
-    </Router>
-  </UserProvider>
-);
+const rootElement = document.getElementById('root'); // Verwenden Sie 'root', wie es im HTML-Dokument angegeben ist
+
+if (rootElement) {
+  const root = createRoot(rootElement);
+
+  root.render(
+    <Auth0Provider
+      domain="dev-isef-project.eu.auth0.com"
+      clientId="87fezgW4VeyUVO2iiBPKZASk15Ah5kIi"
+      authorizationParams={{
+        redirect_uri: window.location.origin,
+      }}
+    >
+      <UserProvider>
+        <Router>
+          <App />
+        </Router>
+      </UserProvider>
+    </Auth0Provider>
+  );
+} else {
+  console.error("Target container 'root' is not a DOM element.");
+}

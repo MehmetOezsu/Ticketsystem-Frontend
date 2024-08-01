@@ -1,5 +1,3 @@
-/* src/components/Header.css */
-
 .header {
   display: flex;
   justify-content: space-between;
@@ -51,29 +49,41 @@
   color: blue;
 }
 
-.login-form {
-  display: flex;
-  align-items: center;
-}
-
-.login-input {
-  width: 200px; /* Breite der Eingabefelder */
-  padding: 10px;
-  margin-right: 10px; /* Abstand zwischen den Eingabefeldern und dem Button */
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
-.login-button, .logout-button {
+.button {
   padding: 10px 20px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 14px;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.logout-button {
+  background-color: #007bff;
+}
+
+.logout-button:hover {
+  background-color: #0056b3;
+}
+
+.login-button {
+  background-color: #007bff;
+}
+
+.login-button:hover {
+  background-color: #0056b3;
+}
+
+.userSection {
+  display: flex;
+  align-items: center;
 }
 
 .user-name {
-  margin-right: 10px; /* Abstand zwischen dem Namen und dem Logout-Button */
-  font-size: 1.5rem;
+  margin-right: 10px;
 }

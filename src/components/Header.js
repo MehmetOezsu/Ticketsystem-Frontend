@@ -1,16 +1,17 @@
-// src/components/Header.js
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../logo.png';
 import './Header.css';
-import Login from './Login';
 import { UserContext } from '../UserContext';
+import { useAuth0 } from '@auth0/auth0-react';
 
 function Header() {
-  const { user, setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
+  const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
 
   const handleLogout = () => {
     setUser(null);
+    logout({ logoutParams: { returnTo: window.location.origin } });
   };
 
   return (
@@ -31,18 +32,14 @@ function Header() {
       </div>
       <nav className="nav">
         <ul className="navList">
-          {user ? (
-            <>
-              <li className="navItem">
-                <span className="user-name">{user.name}</span>
-              </li>
-              <li className="navItem">
-                <button onClick={handleLogout} className="logout-button">Logout</button>
-              </li>
-            </>
+          {isAuthenticated ? (
+            <li className="navItem userSection">
+              <span className="user-name">Hello {user ? user.email : 'User'}</span>
+              <button onClick={handleLogout} className="button logout-button">Logout</button>
+            </li>
           ) : (
             <li className="navItem">
-              <Login onLogin={(user) => setUser(user)} />
+              <button onClick={() => loginWithRedirect()} className="button login-button">Login</button>
             </li>
           )}
         </ul>
