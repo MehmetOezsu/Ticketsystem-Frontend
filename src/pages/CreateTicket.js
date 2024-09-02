@@ -6,8 +6,8 @@ function CreateTicket() {
   const [userId, setUserId] = useState('');
   const [title, setTitle] = useState('');
   const [assignedModuleId, setAssignedModuleId] = useState('');
-  const [category, setCategory] = useState('');
-  const [ticketSource, setTicketSource] = useState('');
+  const [category, setCategory] = useState('AUDIO');
+  const [ticketSource, setTicketSource] = useState('EXERCISE');
   const [description, setDescription] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
@@ -19,7 +19,8 @@ function CreateTicket() {
       assignedModuleId,
       category,
       ticketSource,
-      description
+      description,
+      status: 'ACTIVE'  // Status wird standardmäßig auf 'ACTIVE' gesetzt
     };
     axios.post('https://isef.palt.one/tickets', newTicket)
       .then(response => {
@@ -29,8 +30,8 @@ function CreateTicket() {
         setUserId('');
         setTitle('');
         setAssignedModuleId('');
-        setCategory('');
-        setTicketSource('');
+        setCategory('AUDIO');
+        setTicketSource('EXERCISE');
         setDescription('');
         // Remove success modal after a delay
         setTimeout(() => setShowSuccessModal(false), 5000);
@@ -81,21 +82,29 @@ function CreateTicket() {
         </div>
         <div className="form-group">
           <label>Kategorie</label>
-          <input
-            type="text"
+          <select
+            name="category"
             value={category}
             onChange={e => setCategory(e.target.value)}
             required
-          />
+          >
+            <option value="AUDIO">Audio</option>
+            <option value="MISSING_SOURCE">Fehlende Quelle</option>
+          </select>
         </div>
         <div className="form-group">
           <label>Material</label>
-          <input
-            type="text"
+          <select
+            name="ticketSource"
             value={ticketSource}
             onChange={e => setTicketSource(e.target.value)}
             required
-          />
+          >
+            <option value="EXERCISE">Übung</option>
+            <option value="SCRIPT">Skript</option>
+            <option value="IULEARN">IU Learn</option>
+            <option value="VIDEO">Video</option>
+          </select>
         </div>
         <div className="form-group">
           <label>Beschreibung</label>
