@@ -76,13 +76,13 @@ function EditTicket() {
           <label>Bearbeitet am</label>
           <input type="text" name="updatedAt" value={new Date(ticket.updatedAt).toLocaleString()} readOnly />
         </div>
-        <div className="form-group editable">
+        <div className="form-group non-editable">
           <label>Matrikelnummer</label>
-          <input type="text" name="userId" value={ticket.userId} onChange={handleChange} required />
+          <input type="text" name="userId" value={ticket.userId} readOnly />
         </div>
-        <div className="form-group editable">
+        <div className="form-group non-editable">
           <label>Titel</label>
-          <input type="text" name="title" value={ticket.title} onChange={handleChange} required />
+          <input type="text" name="title" value={ticket.title} readOnly />
         </div>
         <div className="form-group editable">
           <label>Status</label>
