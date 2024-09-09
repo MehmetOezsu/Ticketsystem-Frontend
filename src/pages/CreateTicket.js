@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './CreateTicket.css';  // Stellen Sie sicher, dass die CSS-Datei importiert wird
+import { useAuth0 } from '@auth0/auth0-react';
 
 function CreateTicket() {
   const [userId, setUserId] = useState('');
@@ -10,8 +11,9 @@ function CreateTicket() {
   const [ticketSource, setTicketSource] = useState('EXERCISE');
   const [description, setDescription] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const {getAccessTokenSilently} = useAuth0();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newTicket = {
       userId,
@@ -22,23 +24,35 @@ function CreateTicket() {
       description,
       status: 'ACTIVE'  // Status wird standardmäßig auf 'ACTIVE' gesetzt
     };
-    axios.post('https://isef.palt.one/tickets', newTicket)
-      .then(response => {
-        console.log('Ticket created:', response.data);
-        setShowSuccessModal(true);
-        // Clear form fields
-        setUserId('');
-        setTitle('');
-        setAssignedModuleId('');
-        setCategory('AUDIO');
-        setTicketSource('EXERCISE');
-        setDescription('');
-        // Remove success modal after a delay
-        setTimeout(() => setShowSuccessModal(false), 5000);
+    
+    try {
+      const accessToken = await getAccessTokenSilently();
+      const headers = {
+        'Authorization': `Bearer ${accessToken}`
+      }
+  
+      axios.post('https://isef.palt.one/tickets', newTicket, {
+        headers: headers
       })
-      .catch(error => {
-        console.error('Error creating ticket:', error);
-      });
+        .then(response => {
+          console.log('Ticket created:', response.data);
+          setShowSuccessModal(true);
+          // Clear form fields
+          setUserId('');
+          setTitle('');
+          setAssignedModuleId('');
+          setCategory('AUDIO');
+          setTicketSource('EXERCISE');
+          setDescription('');
+          // Remove success modal after a delay
+          setTimeout(() => setShowSuccessModal(false), 5000);
+        })
+        .catch(error => {
+          console.error('Error creating ticket:', error);
+        });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

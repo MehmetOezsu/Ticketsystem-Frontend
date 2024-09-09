@@ -18,6 +18,9 @@ if (rootElement) {
       authorizationParams={{
         redirect_uri: window.location.origin,
       }}
+      audient='http://localhost:3000'
+      scope= 'read:current_user'
+
     >
       <UserProvider>
         <Router>
