@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axiosInstance from '../api/axios';
-import './EditTicket.css';  // Importieren Sie die CSS-Datei
+import './EditTicket.css';
+import { useAuth0 } from '@auth0/auth0-react';
 
 function EditTicket() {
   const { id } = useParams();
@@ -18,16 +19,25 @@ function EditTicket() {
     ticketSource: ''
   });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const { getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
-    axiosInstance.get(`ticket/${id}`)
-      .then(response => {
+    const fetchTicket = async () => {
+      try {
+        const accessToken = await getAccessTokenSilently();
+        const headers = {
+          'Authorization': `Bearer ${accessToken}`
+        };
+
+        const response = await axiosInstance.get(`ticket/${id}`, { headers: headers });
         setTicket(response.data);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error fetching ticket:', error);
-      });
-  }, [id]);
+      }
+    };
+
+    fetchTicket();
+  }, [id, getAccessTokenSilently]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,19 +47,22 @@ function EditTicket() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axiosInstance.put(`ticket/${id}`, ticket)
-      .then(response => {
-        console.log('Ticket updated:', response.data);
-        setShowSuccessModal(true);
-        // Remove success modal after a delay
-        setTimeout(() => setShowSuccessModal(false), 5000);
-      })
-      .catch(error => {
-        console.error('Error updating ticket:', error);
-        alert('Fehler beim Aktualisieren des Tickets: ' + (error.response ? error.response.data : error.message));
-      });
+
+    try {
+      const accessToken = await getAccessTokenSilently();
+      const headers = {
+        'Authorization': `Bearer ${accessToken}`
+      };
+
+      await axiosInstance.put(`ticket/${id}`, ticket, { headers: headers });
+      setShowSuccessModal(true);
+      setTimeout(() => setShowSuccessModal(false), 5000);
+    } catch (error) {
+      console.error('Error updating ticket:', error);
+      alert('Fehler beim Aktualisieren des Tickets: ' + (error.response ? error.response.data : error.message));
+    }
   };
 
   return (
@@ -94,8 +107,13 @@ function EditTicket() {
         <div className="form-group editable">
           <label>Kategorie</label>
           <select name="category" value={ticket.category} onChange={handleChange} required>
-            <option value="AUDIO">Audio</option>
-            <option value="MISSING_SOURCE">Fehlende Quelle</option>
+            <option value="Inhaltlicher Fehler">Inhaltlicher Fehler</option>
+            <option value="Rechtschreib-/Grammatikfehler">Rechtschreib-/Grammatikfehler</option>
+            <option value="Unklare Formulierung">Unklare Formulierung</option>
+            <option value="Literaturangabe">Literaturangabe</option>
+            <option value="Tonprobleme">Tonprobleme</option>
+            <option value="Fehlende Quelle">Fehlende Quelle</option>
+            <option value="Sonstiges">Sonstiges</option>
           </select>
         </div>
         <div className="form-group editable">

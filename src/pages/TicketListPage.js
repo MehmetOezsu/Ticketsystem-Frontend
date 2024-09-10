@@ -12,7 +12,7 @@ function TicketListPage() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [deleteTicketId, setDeleteTicketId] = useState(null);
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
     axiosInstance.get('tickets')
@@ -42,22 +42,32 @@ function TicketListPage() {
     setShowConfirmModal(true);
   };
 
-  const confirmDelete = () => {
-    axiosInstance.delete(`ticket/${deleteTicketId}`)
-      .then(response => {
-        setTickets(tickets.filter(ticket => ticket.id !== deleteTicketId));
-        setFilteredTickets(filteredTickets.filter(ticket => ticket.id !== deleteTicketId));
-        console.log('Ticket deleted:', response.data);
-        setModalMessage('Ticket erfolgreich gelöscht!');
-        setShowSuccessModal(true);
-        setShowConfirmModal(false);
-        // Remove success modal after a delay
-        setTimeout(() => setShowSuccessModal(false), 5000);
-      })
-      .catch(error => {
-        console.error('Error deleting ticket:', error.response ? error.response.data : error.message);
-        alert('Fehler beim Löschen des Tickets: ' + (error.response ? error.response.data : error.message));
-      });
+  const confirmDelete = async () => {
+    try {
+      const accessToken = await getAccessTokenSilently();
+      const headers = {
+        'Authorization': `Bearer ${accessToken}`
+      };
+
+      axiosInstance.delete(`ticket/${deleteTicketId}`, { headers: headers })
+        .then(response => {
+          setTickets(tickets.filter(ticket => ticket.id !== deleteTicketId));
+          setFilteredTickets(filteredTickets.filter(ticket => ticket.id !== deleteTicketId));
+          console.log('Ticket deleted:', response.data);
+          setModalMessage('Ticket erfolgreich gelöscht!');
+          setShowSuccessModal(true);
+          setShowConfirmModal(false);
+          // Remove success modal after a delay
+          setTimeout(() => setShowSuccessModal(false), 5000);
+        })
+        .catch(error => {
+          console.error('Error deleting ticket:', error.response ? error.response.data : error.message);
+          alert('Fehler beim Löschen des Tickets: ' + (error.response ? error.response.data : error.message));
+        });
+    } catch (error) {
+      console.error('Error obtaining access token:', error);
+      alert('Fehler beim Abrufen des Zugriffstokens: ' + error.message);
+    }
   };
 
   const cancelDelete = () => {

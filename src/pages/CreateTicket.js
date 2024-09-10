@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './CreateTicket.css';  // Stellen Sie sicher, dass die CSS-Datei importiert wird
+import './CreateTicket.css';  
 import { useAuth0 } from '@auth0/auth0-react';
 
 function CreateTicket() {
   const [userId, setUserId] = useState('');
   const [title, setTitle] = useState('');
   const [assignedModuleId, setAssignedModuleId] = useState('');
-  const [category, setCategory] = useState('AUDIO');
+  const [category, setCategory] = useState('Inhaltlicher Fehler');
   const [ticketSource, setTicketSource] = useState('EXERCISE');
   const [description, setDescription] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const {getAccessTokenSilently} = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,15 +22,15 @@ function CreateTicket() {
       category,
       ticketSource,
       description,
-      status: 'ACTIVE'  // Status wird standardmäßig auf 'ACTIVE' gesetzt
+      status: 'ACTIVE' 
     };
-    
+
     try {
       const accessToken = await getAccessTokenSilently();
       const headers = {
         'Authorization': `Bearer ${accessToken}`
-      }
-  
+      };
+
       axios.post('https://isef.palt.one/tickets', newTicket, {
         headers: headers
       })
@@ -41,7 +41,7 @@ function CreateTicket() {
           setUserId('');
           setTitle('');
           setAssignedModuleId('');
-          setCategory('AUDIO');
+          setCategory('Inhaltlicher Fehler');
           setTicketSource('EXERCISE');
           setDescription('');
           // Remove success modal after a delay
@@ -102,8 +102,13 @@ function CreateTicket() {
             onChange={e => setCategory(e.target.value)}
             required
           >
-            <option value="AUDIO">Audio</option>
-            <option value="MISSING_SOURCE">Fehlende Quelle</option>
+            <option value="Inhaltlicher Fehler">Inhaltlicher Fehler</option>
+            <option value="Rechtschreib-/Grammatikfehler">Rechtschreib-/Grammatikfehler</option>
+            <option value="Unklare Formulierung">Unklare Formulierung</option>
+            <option value="Literaturangabe">Literaturangabe</option>
+            <option value="Tonprobleme">Tonprobleme</option>
+            <option value="Fehlende Quelle">Fehlende Quelle</option>
+            <option value="Sonstiges">Sonstiges</option>
           </select>
         </div>
         <div className="form-group">
