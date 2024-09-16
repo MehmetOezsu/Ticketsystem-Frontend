@@ -14,8 +14,14 @@ function TicketListPage() {
   const [deleteTicketId, setDeleteTicketId] = useState(null);
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
-  useEffect(() => {
-    axiosInstance.get('tickets')
+   useEffect( ()=> {
+    var headers = {}
+
+    getAccessTokenSilently().then(response => {
+      headers = {
+        'Authorization': `Bearer ${response}`
+      };
+      axiosInstance.get('tickets', { headers: headers })
       .then(response => {
         setTickets(response.data.data);
         setFilteredTickets(response.data.data);
@@ -23,7 +29,11 @@ function TicketListPage() {
       .catch(error => {
         console.error('Error fetching tickets:', error);
       });
-  }, []);
+    }).catch(error => {
+      console.error('Error retreiving accesstoken:', error)
+    }); 
+    
+  }, [getAccessTokenSilently]);
 
   useEffect(() => {
     if (searchTerm === '') {
