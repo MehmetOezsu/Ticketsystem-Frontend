@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import './CreateTicket.css';  
 import { useAuth0 } from '@auth0/auth0-react';
+import axiosInstance from '../api/axios';
 
 function CreateTicket() {
   const [userId, setUserId] = useState('');
@@ -31,7 +31,7 @@ function CreateTicket() {
         'Authorization': `Bearer ${accessToken}`
       };
 
-      axios.post('https://isef.palt.one/tickets', newTicket, {
+      axiosInstance.post('tickets', newTicket, {
         headers: headers
       })
         .then(response => {
