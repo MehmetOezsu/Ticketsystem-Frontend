@@ -18,7 +18,8 @@ if (rootElement) {
       authorizationParams={{
         redirect_uri: window.location.origin,
         audience:`https://project-isef.palt.one`,
-        scope:"read:current_user",
+        scope:"openid profile email tickets:manage tickets:read_own tickets:create",
+       // prompt:'none',
       }
     }
 
