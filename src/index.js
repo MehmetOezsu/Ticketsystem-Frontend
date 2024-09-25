@@ -17,9 +17,11 @@ if (rootElement) {
       clientId="87fezgW4VeyUVO2iiBPKZASk15Ah5kIi"
       authorizationParams={{
         redirect_uri: window.location.origin,
-      }}
-      audient='http://localhost:3000'
-      scope= 'read:current_user'
+        audience:`https://project-isef.palt.one`,
+        scope:"openid profile email tickets:manage tickets:read_own tickets:create",
+       // prompt:'none',
+      }
+    }
 
     >
       <UserProvider>

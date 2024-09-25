@@ -12,24 +12,35 @@ function TicketListPage() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [deleteTicketId, setDeleteTicketId] = useState(null);
-  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
 
   useEffect(() => {
-    axiosInstance.get('tickets')
-      .then(response => {
-        setTickets(response.data.data);
-        setFilteredTickets(response.data.data);
-      })
-      .catch(error => {
-        console.error('Error fetching tickets:', error);
+    if (isAuthenticated) {
+      getAccessTokenSilently().then(accessToken => {
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
+        axiosInstance.get('tickets', { headers })
+          .then(response => {
+            setTickets(response.data.data);
+            setFilteredTickets(response.data.data);
+          })
+          .catch(error => {
+            console.error('Error fetching tickets:', error);
+          });
+      }).catch(error => {
+        console.error('Error retrieving access token:', error);
       });
-  }, []);
+    }
+  }, [isAuthenticated, getAccessTokenSilently]);
 
   useEffect(() => {
     if (searchTerm === '') {
       setFilteredTickets(tickets);
     } else {
-      setFilteredTickets(tickets.filter(ticket => ticket.assignedModuleId.toLowerCase().includes(searchTerm.toLowerCase())));
+      setFilteredTickets(tickets.filter(ticket =>
+        ticket.assignedModuleId.toLowerCase().includes(searchTerm.toLowerCase())
+      ));
     }
   }, [searchTerm, tickets]);
 
@@ -46,18 +57,16 @@ function TicketListPage() {
     try {
       const accessToken = await getAccessTokenSilently();
       const headers = {
-        'Authorization': `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
       };
 
-      axiosInstance.delete(`ticket/${deleteTicketId}`, { headers: headers })
+      axiosInstance.delete(`ticket/${deleteTicketId}`, { headers })
         .then(response => {
           setTickets(tickets.filter(ticket => ticket.id !== deleteTicketId));
           setFilteredTickets(filteredTickets.filter(ticket => ticket.id !== deleteTicketId));
-          console.log('Ticket deleted:', response.data);
           setModalMessage('Ticket erfolgreich gelöscht!');
           setShowSuccessModal(true);
           setShowConfirmModal(false);
-          // Remove success modal after a delay
           setTimeout(() => setShowSuccessModal(false), 5000);
         })
         .catch(error => {
@@ -112,14 +121,16 @@ function TicketListPage() {
             <th className="th">ID</th>
             <th className="th">Erstellt am</th>
             <th className="th">Bearbeitet am</th>
-            <th className="th">Matrikelnummer</th>
+            <th className="th">E-Mail</th>
+            <th className="th">Vorname</th>
+            <th className="th">Nachname</th>
             <th className="th">Titel</th>
             <th className="th">Status</th>
             <th className="th">Kategorie</th>
             <th className="th">Beschreibung</th>
             <th className="th">Modul</th>
             <th className="th">Material</th>
-            {isAuthenticated && <th className="th">Aktionen</th>}
+            <th className="th">Aktionen</th>
           </tr>
         </thead>
         <tbody className="tbody">
@@ -128,19 +139,21 @@ function TicketListPage() {
               <td className="td">{ticket.id}</td>
               <td className="td">{new Date(ticket.createdAt).toLocaleString()}</td>
               <td className="td">{new Date(ticket.updatedAt).toLocaleString()}</td>
-              <td className="td">{ticket.userId}</td>
+              <td className="td">{ticket.email}</td>
+              <td className="td">{ticket.firstName}</td>
+              <td className="td">{ticket.lastName}</td>
               <td className="td">{ticket.title}</td>
               <td className="td">{ticket.status}</td>
               <td className="td">{ticket.category}</td>
               <td className="td">{ticket.description}</td>
               <td className="td">{ticket.assignedModuleId}</td>
               <td className="td">{ticket.ticketSource}</td>
-              {isAuthenticated && (
-                <td className="td">
-                  <Link to={`/edit/${ticket.id}`} className="button edit-button">Bearbeiten</Link>
+              <td className="td">
+                <Link to={`/edit/${ticket.id}`} className="button edit-button">Bearbeiten</Link>
+                {user && user.email === 'example-use@iu-studies.org' && (
                   <button onClick={() => handleDelete(ticket.id)} className="button delete-button" style={{ backgroundColor: '#ff0000', color: 'white' }}>Löschen</button>
-                </td>
-              )}
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

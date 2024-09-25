@@ -1,57 +1,47 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './CreateTicket.css';  
+import './CreateTicket.css'; 
 import { useAuth0 } from '@auth0/auth0-react';
 
 function CreateTicket() {
-  const [userId, setUserId] = useState('');
+  const { user, getAccessTokenSilently } = useAuth0(); 
   const [title, setTitle] = useState('');
   const [assignedModuleId, setAssignedModuleId] = useState('');
   const [category, setCategory] = useState('Inhaltlicher Fehler');
   const [ticketSource, setTicketSource] = useState('EXERCISE');
   const [description, setDescription] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const { getAccessTokenSilently } = useAuth0();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newTicket = {
-      userId,
+      userEmail: user.email, 
+      firstName: user.given_name, 
+      lastName: user.family_name, 
       title,
       assignedModuleId,
       category,
       ticketSource,
       description,
-      status: 'ACTIVE' 
+      status: 'ACTIVE',
     };
 
     try {
       const accessToken = await getAccessTokenSilently();
       const headers = {
-        'Authorization': `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
       };
 
-      axios.post('https://isef.palt.one/tickets', newTicket, {
-        headers: headers
-      })
-        .then(response => {
-          console.log('Ticket created:', response.data);
-          setShowSuccessModal(true);
-          // Clear form fields
-          setUserId('');
-          setTitle('');
-          setAssignedModuleId('');
-          setCategory('Inhaltlicher Fehler');
-          setTicketSource('EXERCISE');
-          setDescription('');
-          // Remove success modal after a delay
-          setTimeout(() => setShowSuccessModal(false), 5000);
-        })
-        .catch(error => {
-          console.error('Error creating ticket:', error);
-        });
+      await axios.post('https://isef.palt.one/tickets', newTicket, { headers });
+      setShowSuccessModal(true);
+      setTitle('');
+      setAssignedModuleId('');
+      setCategory('Inhaltlicher Fehler');
+      setTicketSource('EXERCISE');
+      setDescription('');
+      setTimeout(() => setShowSuccessModal(false), 5000);
     } catch (error) {
-      console.error(error);
+      console.error('Error creating ticket:', error);
     }
   };
 
@@ -68,12 +58,30 @@ function CreateTicket() {
       )}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Matrikelnummer</label>
+          <label>E-Mail</label>
           <input
             type="text"
-            value={userId}
-            onChange={e => setUserId(e.target.value)}
-            required
+            value={user.email}
+            readOnly
+            className="readonly-input"
+          />
+        </div>
+        <div className="form-group">
+          <label>Vorname</label>
+          <input
+            type="text"
+            value={user.given_name}
+            readOnly
+            className="readonly-input"
+          />
+        </div>
+        <div className="form-group">
+          <label>Nachname</label>
+          <input
+            type="text"
+            value={user.family_name}
+            readOnly
+            className="readonly-input"
           />
         </div>
         <div className="form-group">
@@ -81,7 +89,7 @@ function CreateTicket() {
           <input
             type="text"
             value={title}
-            onChange={e => setTitle(e.target.value)}
+            onChange={(e) => setTitle(e.target.value)}
             required
           />
         </div>
@@ -90,7 +98,7 @@ function CreateTicket() {
           <input
             type="text"
             value={assignedModuleId}
-            onChange={e => setAssignedModuleId(e.target.value)}
+            onChange={(e) => setAssignedModuleId(e.target.value)}
             required
           />
         </div>
@@ -99,7 +107,7 @@ function CreateTicket() {
           <select
             name="category"
             value={category}
-            onChange={e => setCategory(e.target.value)}
+            onChange={(e) => setCategory(e.target.value)}
             required
           >
             <option value="Inhaltlicher Fehler">Inhaltlicher Fehler</option>
@@ -116,7 +124,7 @@ function CreateTicket() {
           <select
             name="ticketSource"
             value={ticketSource}
-            onChange={e => setTicketSource(e.target.value)}
+            onChange={(e) => setTicketSource(e.target.value)}
             required
           >
             <option value="EXERCISE">Übung</option>
@@ -129,7 +137,7 @@ function CreateTicket() {
           <label>Beschreibung</label>
           <textarea
             value={description}
-            onChange={e => setDescription(e.target.value)}
+            onChange={(e) => setDescription(e.target.value)}
             required
           />
         </div>

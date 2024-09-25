@@ -19,16 +19,18 @@ function Header() {
       <div className="logoContainer">
         <img src={logo} alt="Logo" className="logo" />
         <h1 className="title">IU-Korrektur</h1>
-        <nav className="nav">
-          <ul className="navList">
-            <li className="navItem">
-              <Link to="/" className="navLink">Ticketliste</Link>
-            </li>
-            <li className="navItem">
-              <Link to="/create" className="navLink">Ticket erstellen</Link>
-            </li>
-          </ul>
-        </nav>
+        {isAuthenticated && (
+          <nav className="nav">
+            <ul className="navList">
+              <li className="navItem">
+                <Link to="/ticketlist" className="navLink">Ticketliste</Link>
+              </li>
+              <li className="navItem">
+                <Link to="/create" className="navLink">Ticket erstellen</Link>
+              </li>
+            </ul>
+          </nav>
+        )}
       </div>
       <nav className="nav">
         <ul className="navList">

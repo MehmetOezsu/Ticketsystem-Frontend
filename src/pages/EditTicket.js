@@ -10,7 +10,9 @@ function EditTicket() {
     id: '',
     createdAt: '',
     updatedAt: '',
-    userId: '',
+    userEmail: '',
+    firstName: '',
+    lastName: '',
     title: '',
     status: '',
     category: '',
@@ -29,7 +31,7 @@ function EditTicket() {
           'Authorization': `Bearer ${accessToken}`
         };
 
-        const response = await axiosInstance.get(`ticket/${id}`, { headers: headers });
+        const response = await axiosInstance.get(`ticket/${id}`, { headers });
         setTicket(response.data);
       } catch (error) {
         console.error('Error fetching ticket:', error);
@@ -56,7 +58,7 @@ function EditTicket() {
         'Authorization': `Bearer ${accessToken}`
       };
 
-      await axiosInstance.put(`ticket/${id}`, ticket, { headers: headers });
+      await axiosInstance.put(`ticket/${id}`, ticket, { headers });
       setShowSuccessModal(true);
       setTimeout(() => setShowSuccessModal(false), 5000);
     } catch (error) {
@@ -90,8 +92,16 @@ function EditTicket() {
           <input type="text" name="updatedAt" value={new Date(ticket.updatedAt).toLocaleString()} readOnly />
         </div>
         <div className="form-group non-editable">
-          <label>Matrikelnummer</label>
-          <input type="text" name="userId" value={ticket.userId} readOnly />
+          <label>E-Mail</label>
+          <input type="text" name="email" value={ticket.userEmail} readOnly />
+        </div>
+        <div className="form-group non-editable">
+          <label>Vorname</label>
+          <input type="text" name="firstName" value={ticket.firstName} readOnly />
+        </div>
+        <div className="form-group non-editable">
+          <label>Nachname</label>
+          <input type="text" name="lastName" value={ticket.lastName} readOnly />
         </div>
         <div className="form-group non-editable">
           <label>Titel</label>
