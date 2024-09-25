@@ -23,7 +23,7 @@ function Header() {
           <nav className="nav">
             <ul className="navList">
               <li className="navItem">
-                <Link to="/ticketlist" className="navLink">Ticketliste</Link>
+                <Link to="/ticketlist" className="navLink">Ticketliste </Link>
               </li>
               <li className="navItem">
                 <Link to="/create" className="navLink">Ticket erstellen</Link>

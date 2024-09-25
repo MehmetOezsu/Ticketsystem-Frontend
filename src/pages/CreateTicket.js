@@ -114,7 +114,7 @@ function CreateTicket() {
             <option value="Rechtschreib-/Grammatikfehler">Rechtschreib-/Grammatikfehler</option>
             <option value="Unklare Formulierung">Unklare Formulierung</option>
             <option value="Literaturangabe">Literaturangabe</option>
-            <option value="Tonprobleme">Tonprobleme</option>
+            <option value="Tonprobleme">Tonproblem</option>
             <option value="Fehlende Quelle">Fehlende Quelle</option>
             <option value="Sonstiges">Sonstiges</option>
           </select>
