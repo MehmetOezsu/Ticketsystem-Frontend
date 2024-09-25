@@ -41,7 +41,11 @@ function Header() {
             </li>
           ) : (
             <li className="navItem">
-              <button onClick={() => loginWithRedirect()} className="button login-button">Login</button>
+              <button onClick={() => loginWithRedirect({
+                authorizationParams: {
+                  redirect_uri: window.location.href
+                }
+              })} className="button login-button">Login</button>
             </li>
           )}
         </ul>
