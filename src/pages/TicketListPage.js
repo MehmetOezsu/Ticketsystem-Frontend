@@ -149,9 +149,13 @@ function TicketListPage() {
               <td className="td">{ticket.assignedModuleId}</td>
               <td className="td">{ticket.ticketSource}</td>
               <td className="td">
-                <Link to={`/edit/${ticket.id}`} className="button edit-button">Bearbeiten</Link>
+                <Link to={`/edit/${ticket.id}`} className="button edit-button">
+                  {user.email === 'example-use@iu-studies.org' ? 'Bearbeiten' : 'Ansicht'}
+                </Link>
                 {user && user.email === 'example-use@iu-studies.org' && (
-                  <button onClick={() => handleDelete(ticket.id)} className="button delete-button" style={{ backgroundColor: '#ff0000', color: 'white' }}>Löschen</button>
+                  <>
+                    <button onClick={() => handleDelete(ticket.id)} className="button delete-button" style={{ backgroundColor: '#ff0000', color: 'white', marginTop: '10px' }}>Löschen</button>
+                  </>
                 )}
               </td>
             </tr>

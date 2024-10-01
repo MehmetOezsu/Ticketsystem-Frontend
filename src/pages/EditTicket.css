@@ -80,3 +80,8 @@
     cursor: pointer;
   }
   
+  .readonly-input {
+    background-color: #f1f1f1; /* Die gleiche graue Farbe wie andere ausgegraute Felder */
+    color: #6c757d;
+    cursor: not-allowed;
+  }
