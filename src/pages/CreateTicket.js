@@ -16,6 +16,7 @@ function CreateTicket() {
     e.preventDefault();
     const newTicket = {
       userEmail: user.email, 
+      userName: user.name,  // Hier wird der Name über user.name gesetzt
       title,
       assignedModuleId,
       category,
@@ -60,6 +61,15 @@ function CreateTicket() {
           <input
             type="text"
             value={user.email}
+            readOnly
+            className="readonly-input"
+          />
+        </div>
+        <div className="form-group">
+          <label>Name</label> 
+          <input
+            type="text"
+            value={user.name} 
             readOnly
             className="readonly-input"
           />

@@ -11,8 +11,7 @@ function EditTicket() {
     createdAt: '',
     updatedAt: '',
     userEmail: '',
-    firstName: '',
-    lastName: '',
+    userName: '',  // Verwende userName für den Namen des Benutzers
     title: '',
     status: '',
     category: '',
@@ -21,15 +20,17 @@ function EditTicket() {
     ticketSource: ''
   });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const { getAccessTokenSilently, user } = useAuth0();
-
-  // Check if the user is a Dozent (Dozenten Email: example-use@iu-studies.org)
-  const isDozent = user.email === 'example-use@iu-studies.org';
+  const { getAccessTokenSilently } = useAuth0();
+  const [isDozent, setDozent] = useState(false);
 
   useEffect(() => {
     const fetchTicket = async () => {
       try {
         const accessToken = await getAccessTokenSilently();
+        const decodedToken = JSON.parse(atob(accessToken.split('.')[1]));
+        const roles = decodedToken['permissions'] || [];
+        setDozent(roles.includes("tickets:manage"));
+
         const headers = {
           'Authorization': `Bearer ${accessToken}`
         };
@@ -52,14 +53,13 @@ function EditTicket() {
     }));
   };
 
-  // Füge die fehlende handleSubmit Funktion hinzu
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const accessToken = await getAccessTokenSilently();
       const headers = {
-        Authorization: `Bearer ${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`
       };
 
       await axiosInstance.put(`ticket/${id}`, ticket, { headers });
@@ -82,80 +82,71 @@ function EditTicket() {
           </div>
         </div>
       )}
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="form-group non-editable">
           <label>ID</label>
-          <input type="text" name="id" value={ticket.id} readOnly className="readonly-input" />
+          <input type="text" name="id" value={ticket.id} readOnly />
         </div>
         <div className="form-group non-editable">
           <label>Erstellt am</label>
-          <input type="text" name="createdAt" value={new Date(ticket.createdAt).toLocaleString()} readOnly className="readonly-input" />
+          <input type="text" name="createdAt" value={new Date(ticket.createdAt).toLocaleString()} readOnly />
         </div>
         <div className="form-group non-editable">
           <label>Bearbeitet am</label>
-          <input type="text" name="updatedAt" value={new Date(ticket.updatedAt).toLocaleString()} readOnly className="readonly-input" />
+          <input type="text" name="updatedAt" value={new Date(ticket.updatedAt).toLocaleString()} readOnly />
         </div>
         <div className="form-group non-editable">
           <label>E-Mail</label>
-          <input type="text" name="email" value={ticket.userEmail} readOnly className="readonly-input" />
+          <input type="text" name="userEmail" value={ticket.userEmail} readOnly />
         </div>
         <div className="form-group non-editable">
-          <label>Vorname</label>
-          <input type="text" name="firstName" value={ticket.firstName} readOnly className="readonly-input" />
+          <label>Name</label>
+          <input type="text" name="userName" value={ticket.userName} readOnly /> 
         </div>
         <div className="form-group non-editable">
-          <label>Nachname</label>
-          <input type="text" name="lastName" value={ticket.lastName} readOnly className="readonly-input" />
-        </div>
-        <div className={`form-group ${isDozent ? '' : 'non-editable'}`}>
           <label>Titel</label>
-          <input
-            type="text"
-            name="title"
-            value={ticket.title}
-            onChange={handleChange}
-            readOnly={!isDozent}
-            className={!isDozent ? 'readonly-input' : ''}
-          />
-        </div>
-        <div className={`form-group ${isDozent ? '' : 'non-editable'}`}>
-          <label>Status</label>
-          <select name="status" value={ticket.status} onChange={handleChange} disabled={!isDozent} className={!isDozent ? 'readonly-input' : ''}>
-            <option value="ACTIVE">Aktiv</option>
-            <option value="SOLVED">Gelöst</option>
-          </select>
-        </div>
-        <div className={`form-group ${isDozent ? '' : 'non-editable'}`}>
-          <label>Kategorie</label>
-          <select name="category" value={ticket.category} onChange={handleChange} disabled={!isDozent} className={!isDozent ? 'readonly-input' : ''}>
-            <option value="Inhaltlicher Fehler">Inhaltlicher Fehler</option>
-            <option value="Rechtschreib-/Grammatikfehler">Rechtschreib-/Grammatikfehler</option>
-            <option value="Unklare Formulierung">Unklare Formulierung</option>
-            <option value="Literaturangabe">Literaturangabe</option>
-            <option value="Tonprobleme">Tonprobleme</option>
-            <option value="Fehlende Quelle">Fehlende Quelle</option>
-            <option value="Sonstiges">Sonstiges</option>
-          </select>
-        </div>
-        <div className={`form-group ${isDozent ? '' : 'non-editable'}`}>
-          <label>Beschreibung</label>
-          <textarea name="description" value={ticket.description} onChange={handleChange} readOnly={!isDozent} className={!isDozent ? 'readonly-input' : ''} />
-        </div>
-        <div className={`form-group ${isDozent ? '' : 'non-editable'}`}>
-          <label>Modul</label>
-          <input type="text" name="assignedModuleId" value={ticket.assignedModuleId} onChange={handleChange} readOnly={!isDozent} className={!isDozent ? 'readonly-input' : ''} />
-        </div>
-        <div className={`form-group ${isDozent ? '' : 'non-editable'}`}>
-          <label>Material</label>
-          <select name="ticketSource" value={ticket.ticketSource} onChange={handleChange} disabled={!isDozent} className={!isDozent ? 'readonly-input' : ''}>
-            <option value="EXERCISE">Übung</option>
-            <option value="SCRIPT">Skript</option>
-            <option value="IULEARN">IU Learn</option>
-            <option value="VIDEO">Video</option>
-          </select>
+          <input type="text" name="title" value={ticket.title} readOnly />
         </div>
         {isDozent && (
-          <button type="submit" onClick={handleSubmit}>Aktualisieren</button>
+          <>
+            <div className="form-group editable">
+              <label>Status</label>
+              <select name="status" value={ticket.status} onChange={handleChange} required>
+                <option value="ACTIVE">Aktiv</option>
+                <option value="SOLVED">Gelöst</option>
+              </select>
+            </div>
+            <div className="form-group editable">
+              <label>Kategorie</label>
+              <select name="category" value={ticket.category} onChange={handleChange} required>
+                <option value="Inhaltlicher Fehler">Inhaltlicher Fehler</option>
+                <option value="Rechtschreib-/Grammatikfehler">Rechtschreib-/Grammatikfehler</option>
+                <option value="Unklare Formulierung">Unklare Formulierung</option>
+                <option value="Literaturangabe">Literaturangabe</option>
+                <option value="Tonprobleme">Tonprobleme</option>
+                <option value="Fehlende Quelle">Fehlende Quelle</option>
+                <option value="Sonstiges">Sonstiges</option>
+              </select>
+            </div>
+            <div className="form-group editable">
+              <label>Beschreibung</label>
+              <textarea name="description" value={ticket.description} onChange={handleChange} required />
+            </div>
+            <div className="form-group editable">
+              <label>Modul</label>
+              <input type="text" name="assignedModuleId" value={ticket.assignedModuleId} onChange={handleChange} required />
+            </div>
+            <div className="form-group editable">
+              <label>Material</label>
+              <select name="ticketSource" value={ticket.ticketSource} onChange={handleChange} required>
+                <option value="EXERCISE">Übung</option>
+                <option value="SCRIPT">Skript</option>
+                <option value="IULEARN">IU Learn</option>
+                <option value="VIDEO">Video</option>
+              </select>
+            </div>
+            <button type="submit">Aktualisieren</button>
+          </>
         )}
       </form>
     </div>
@@ -163,3 +154,4 @@ function EditTicket() {
 }
 
 export default EditTicket;
+

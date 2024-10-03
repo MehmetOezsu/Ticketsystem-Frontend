@@ -12,11 +12,16 @@ function TicketListPage() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [deleteTicketId, setDeleteTicketId] = useState(null);
-  const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently} = useAuth0();
+  const [isDozent, setDozent] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
       getAccessTokenSilently().then(accessToken => {
+        const decodedToken = JSON.parse(atob(accessToken.split('.')[1])); 
+        const roles = decodedToken['permissions'] || [];
+        setDozent(roles.includes("tickets:manage"));
+
         const headers = {
           Authorization: `Bearer ${accessToken}`,
         };
@@ -122,8 +127,7 @@ function TicketListPage() {
             <th className="th">Erstellt am</th>
             <th className="th">Bearbeitet am</th>
             <th className="th">E-Mail</th>
-            <th className="th">Vorname</th>
-            <th className="th">Nachname</th>
+            <th className="th">Name</th>
             <th className="th">Titel</th>
             <th className="th">Status</th>
             <th className="th">Kategorie</th>
@@ -139,9 +143,8 @@ function TicketListPage() {
               <td className="td">{ticket.id}</td>
               <td className="td">{new Date(ticket.createdAt).toLocaleString()}</td>
               <td className="td">{new Date(ticket.updatedAt).toLocaleString()}</td>
-              <td className="td">{ticket.email}</td>
-              <td className="td">{ticket.firstName}</td>
-              <td className="td">{ticket.lastName}</td>
+              <td className="td">{ticket.userEmail}</td>
+              <td className="td">{ticket.userName}</td>  
               <td className="td">{ticket.title}</td>
               <td className="td">{ticket.status}</td>
               <td className="td">{ticket.category}</td>
@@ -150,12 +153,10 @@ function TicketListPage() {
               <td className="td">{ticket.ticketSource}</td>
               <td className="td">
                 <Link to={`/edit/${ticket.id}`} className="button edit-button">
-                  {user.email === 'example-use@iu-studies.org' ? 'Bearbeiten' : 'Ansicht'}
+                  {isDozent ? 'Bearbeiten' : 'Ansicht'}
                 </Link>
-                {user && user.email === 'example-use@iu-studies.org' && (
-                  <>
-                    <button onClick={() => handleDelete(ticket.id)} className="button delete-button" style={{ backgroundColor: '#ff0000', color: 'white', marginTop: '10px' }}>Löschen</button>
-                  </>
+                {isDozent && (
+                  <button onClick={() => handleDelete(ticket.id)} className="button delete-button" style={{ backgroundColor: '#ff0000', color: 'white' }}>Löschen</button>
                 )}
               </td>
             </tr>
