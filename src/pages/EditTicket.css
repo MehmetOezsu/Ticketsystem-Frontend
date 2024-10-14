@@ -1,87 +1,85 @@
-.non-editable input {
-    background-color: #f2f2f2; /* Hellgrau für nicht veränderbare Felder */
-    color: #555; /* Dunkleres Grau für den Text */
-  }
-  
-  .editable input, .editable select, .editable textarea {
-    background-color: #ffffff; /* Weiß für veränderbare Felder */
-    color: #000; /* Schwarzer Text */
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .form-group input, .form-group select, .form-group textarea {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  button[type="submit"] {
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button[type="submit"]:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Modal Styles */
-  .modal {
-    display: flex;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4);
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 300px;
-    text-align: center;
-    border-radius: 10px;
-  }
-  
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  
-  .readonly-input {
-    background-color: #f1f1f1; /* Die gleiche graue Farbe wie andere ausgegraute Felder */
-    color: #6c757d;
-    cursor: not-allowed;
-  }
+.non-editable input,
+.non-editable select,
+.non-editable textarea {
+  background-color: #f1f1f1; /* Einheitliches Grau für alle nicht bearbeitbaren Felder */
+  color: #6c757d; /* Einheitliche Textfarbe für alle nicht bearbeitbaren Felder */
+  cursor: not-allowed;
+}
+
+/* Styling für bearbeitbare Felder */
+.editable input, .editable select, .editable textarea {
+  background-color: #ffffff; /* Weiß für bearbeitbare Felder */
+  color: #000000; /* Schwarzer Text für bearbeitbare Felder */
+}
+
+/* Generelle Formgruppen-Styling */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button[type="submit"] {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Modal Styles */
+.modal {
+  display: flex;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 300px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}

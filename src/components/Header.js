@@ -23,7 +23,7 @@ function Header() {
           <nav className="nav">
             <ul className="navList">
               <li className="navItem">
-                <Link to="/ticketlist" className="navLink">Ticketliste </Link>
+                <Link to="/ticketlist" className="navLink">Ticketliste</Link>
               </li>
               <li className="navItem">
                 <Link to="/create" className="navLink">Ticket erstellen</Link>
@@ -36,16 +36,13 @@ function Header() {
         <ul className="navList">
           {isAuthenticated ? (
             <li className="navItem userSection">
-              <span className="user-name">Hello {user ? user.email : 'User'}</span>
+              {/* Begrüßung mit dem vollständigen Namen des Benutzers */}
+              <span className="user-name">Hallo {user.name}</span>  
               <button onClick={handleLogout} className="button logout-button">Logout</button>
             </li>
           ) : (
             <li className="navItem">
-              <button onClick={() => loginWithRedirect({
-                authorizationParams: {
-                  redirect_uri: window.location.href
-                }
-              })} className="button login-button">Login</button>
+              <button onClick={() => loginWithRedirect()} className="button login-button">Login</button>
             </li>
           )}
         </ul>
