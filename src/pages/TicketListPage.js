@@ -89,6 +89,34 @@ function TicketListPage() {
     setDeleteTicketId(null);
   };
 
+  // Funktion zur Übersetzung der Statuswerte
+  const translateStatus = (status) => {
+    switch (status) {
+      case 'ACTIVE':
+        return 'Aktiv';
+      case 'SOLVED':
+        return 'Gelöst';
+      default:
+        return status;
+    }
+  };
+
+  // Funktion zur Übersetzung der Materialwerte
+  const translateMaterial = (source) => {
+    switch (source) {
+      case 'IULEARN':
+        return 'IU Learn';
+      case 'SCRIPT':
+        return 'Skript';
+      case 'EXERCISE':
+        return 'Übung';
+      case 'VIDEO':
+        return 'Video';
+      default:
+        return source;
+    }
+  };
+
   return (
     <div>
       <h1>Ticketliste</h1>
@@ -146,11 +174,11 @@ function TicketListPage() {
               <td className="td">{ticket.userEmail}</td>
               <td className="td">{ticket.userName}</td>  
               <td className="td">{ticket.title}</td>
-              <td className="td">{ticket.status}</td>
+              <td className="td">{translateStatus(ticket.status)}</td> {/* Status übersetzt */}
               <td className="td">{ticket.category}</td>
               <td className="td">{ticket.description}</td>
               <td className="td">{ticket.assignedModuleId}</td>
-              <td className="td">{ticket.ticketSource}</td>
+              <td className="td">{translateMaterial(ticket.ticketSource)}</td> {/* Material übersetzt */}
               <td className="td">
                 <Link to={`/edit/${ticket.id}`} className="button edit-button">
                   {isDozent ? 'Bearbeiten' : 'Ansicht'}
