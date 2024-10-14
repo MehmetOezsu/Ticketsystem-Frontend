@@ -84,7 +84,7 @@ function CreateTicket() {
           />
         </div>
         <div className="form-group">
-          <label>Kurs</label>
+          <label>Modul</label>
           <input
             type="text"
             value={assignedModuleId}
