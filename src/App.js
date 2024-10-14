@@ -6,6 +6,7 @@ import CreateTicket from './pages/CreateTicket';
 import EditTicket from './pages/EditTicket';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
+import DemoForm from './pages/DemoForm';
 
 function App() {
   const { isLoading, error, isAuthenticated } = useAuth0();
@@ -31,6 +32,7 @@ function App() {
               <Route path="/ticketlist" element={<TicketListPage />} />
               <Route path="/create" element={<CreateTicket />} />
               <Route path="/edit/:id" element={<EditTicket />} />
+              <Route path="/demo" element={<DemoForm />} />
               <Route path="*" element={<Navigate to="/ticketlist" />} />
             </>
           )}

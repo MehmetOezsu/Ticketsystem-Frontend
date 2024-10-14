@@ -6,6 +6,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 
 function TicketListPage() {
   const [tickets, setTickets] = useState([]);
+  const [isDozent, setDozent] = useState([]);
   const [filteredTickets, setFilteredTickets] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -20,6 +21,10 @@ function TicketListPage() {
         const headers = {
           Authorization: `Bearer ${accessToken}`,
         };
+
+        const decodedToken = JSON.parse(atob(accessToken.split('.')[1])); // JWT decodieren
+        const roles = decodedToken['permissions'] || [];
+        setDozent(roles.includes("tickets:manage"))
         axiosInstance.get('tickets', { headers })
           .then(response => {
             setTickets(response.data.data);
@@ -32,7 +37,7 @@ function TicketListPage() {
         console.error('Error retrieving access token:', error);
       });
     }
-  }, [isAuthenticated, getAccessTokenSilently]);
+  }, [isAuthenticated, getAccessTokenSilently,setDozent]);
 
   useEffect(() => {
     if (searchTerm === '') {
@@ -122,8 +127,7 @@ function TicketListPage() {
             <th className="th">Erstellt am</th>
             <th className="th">Bearbeitet am</th>
             <th className="th">E-Mail</th>
-            <th className="th">Vorname</th>
-            <th className="th">Nachname</th>
+            <th className="th">Ticket von</th>
             <th className="th">Titel</th>
             <th className="th">Status</th>
             <th className="th">Kategorie</th>
@@ -139,9 +143,8 @@ function TicketListPage() {
               <td className="td">{ticket.id}</td>
               <td className="td">{new Date(ticket.createdAt).toLocaleString()}</td>
               <td className="td">{new Date(ticket.updatedAt).toLocaleString()}</td>
-              <td className="td">{ticket.email}</td>
-              <td className="td">{ticket.firstName}</td>
-              <td className="td">{ticket.lastName}</td>
+              <td className="td">{ticket.userEmail}</td>
+              <td className="td">{ticket.userName}</td>
               <td className="td">{ticket.title}</td>
               <td className="td">{ticket.status}</td>
               <td className="td">{ticket.category}</td>
@@ -150,9 +153,9 @@ function TicketListPage() {
               <td className="td">{ticket.ticketSource}</td>
               <td className="td">
                 <Link to={`/edit/${ticket.id}`} className="button edit-button">
-                  {user.email === 'example-use@iu-studies.org' ? 'Bearbeiten' : 'Ansicht'}
+                  {isDozent ? 'Bearbeiten' : 'Ansicht'}
                 </Link>
-                {user && user.email === 'example-use@iu-studies.org' && (
+                {user && isDozent && (
                   <>
                     <button onClick={() => handleDelete(ticket.id)} className="button delete-button" style={{ backgroundColor: '#ff0000', color: 'white', marginTop: '10px' }}>Löschen</button>
                   </>

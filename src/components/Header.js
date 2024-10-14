@@ -28,6 +28,9 @@ function Header() {
               <li className="navItem">
                 <Link to="/create" className="navLink">Ticket erstellen</Link>
               </li>
+              <li className="WebcomponentDemo">
+                <Link to="/demo" className="navLink">Demo</Link>
+              </li>
             </ul>
           </nav>
         )}
