@@ -12,7 +12,7 @@ function TicketListPage() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [deleteTicketId, setDeleteTicketId] = useState(null);
-  const { isAuthenticated, getAccessTokenSilently} = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently, user} = useAuth0();
   const [isDozent, setDozent] = useState(false);
 
   useEffect(() => {
