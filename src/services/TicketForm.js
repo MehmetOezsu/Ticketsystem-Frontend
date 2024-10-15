@@ -104,6 +104,8 @@ class TicketForm extends HTMLElement{
             case "accesstoken":
                 accessToken = newValue;
                 return;
+            default:
+                return;
         }
     }
 
