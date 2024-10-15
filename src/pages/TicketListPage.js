@@ -118,6 +118,27 @@ function TicketListPage() {
     }
   };
 
+  const translateCategory = (category) => {
+    switch (category) {
+      case "CONTENT":
+          return "Inhaltlicher Fehler";
+      case "GRAMMAR":
+          return "Rechtschreib-/Grammatikfehler";
+      case "UNCLEAR":
+          return "Unklare Formulierung";
+      case "LITERATUR":
+          return "Literaturangabe";
+      case "AUDIO":
+          return "Tonprobleme";
+      case "MISSING_SOURCE":
+          return "Fehlende Quelle";
+      case "OTHER":
+          return "Sonstiges";
+      default:
+          return category;
+        }
+  }
+
   return (
     <div>
       <h1>Ticketliste</h1>
@@ -176,7 +197,7 @@ function TicketListPage() {
               <td className="td">{ticket.userName}</td>
               <td className="td">{ticket.title}</td>
               <td className="td">{translateStatus(ticket.status)}</td> {/* Status übersetzt */}
-              <td className="td">{ticket.category}</td>
+              <td className="td">{translateCategory(ticket.category)}</td>
               <td className="td">{ticket.description}</td>
               <td className="td">{ticket.assignedModuleId}</td>
               <td className="td">{translateMaterial(ticket.ticketSource)}</td> {/* Material übersetzt */}

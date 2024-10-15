@@ -13,18 +13,23 @@ template.innerHTML = `
     <label for="category">Kategorie</label>
     <select type="text" name="category" id="category" required>
         <option disabled selected value> -- Wähle einen Wert! -- </option>
-        <option value="AUDIO">Fehler bei der Tonwiedergabe</option>
-        <option value="MISSING_SOURCE">Fehlende Quellenangabe</option>
+        <option value="CONTENT">Inhaltlicher Fehler</option>
+        <option value="GRAMMAR">Rechtschreib-/Grammatikfehler</option>
+        <option value="UNCLEAR">Unklare Formulierung</option>
+        <option value="LITERATUR">Literaturangabe</option>
+        <option value="AUDIO">Tonprobleme</option>
+        <option value="MISSING_SOURCE">Fehlende Quelle</option>
+        <option value="OTHER">Sonstiges</option>
     </select>
 
 
     <label for="ticketSource">Material</label>
     <select type="text" name="ticketSource" id="ticketSource" required>
         <option disabled selected value> -- Wähle einen Wert! -- </option>
-        <option value="EXERCISE">Übungsaufgaben</option>
+        <option value="EXERCISE">Übung</option>
         <option value="SCRIPT">Skript</option>
-        <option value="IULEARN">IU-Learn App</option>
-        <option value="VIDEO">Videos</option>
+        <option value="IULEARN">IU Learn</option>
+        <option value="VIDEO">Video</option>
     </select>
 
     <label for="description">Beschreibung</label>
