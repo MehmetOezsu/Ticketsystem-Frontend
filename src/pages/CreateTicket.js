@@ -8,6 +8,7 @@ function CreateTicket() {
   const [title, setTitle] = useState('');
   const [assignedModuleId, setAssignedModuleId] = useState('');
   const [category, setCategory] = useState('Inhaltlicher Fehler');
+  const [priority, setPriority] = useState('Normal');
   const [ticketSource, setTicketSource] = useState('EXERCISE');
   const [description, setDescription] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -20,6 +21,7 @@ function CreateTicket() {
       title,
       assignedModuleId,
       category,
+      priority,
       ticketSource,
       description,
       status: 'ACTIVE',
@@ -37,6 +39,7 @@ function CreateTicket() {
       setAssignedModuleId('');
       setCategory('Inhaltlicher Fehler');
       setTicketSource('EXERCISE');
+      setPriority('Normal');
       setDescription('');
       setTimeout(() => setShowSuccessModal(false), 5000);
     } catch (error) {
@@ -82,6 +85,20 @@ function CreateTicket() {
             onChange={(e) => setTitle(e.target.value)}
             required
           />
+        </div>
+        <div className="form-group">
+          <label>Priorität</label>
+          <select
+            name="priority"
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+            required
+          >
+            <option value="LOW">Niedrig</option>
+            <option value="MEDIUM">Normal</option>
+            <option value="HIGH">Hoch</option>
+            <option value="URGENT">Dringend</option>
+          </select>
         </div>
         <div className="form-group">
           <label>Modul</label>

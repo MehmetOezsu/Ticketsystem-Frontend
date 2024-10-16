@@ -10,6 +10,15 @@ template.innerHTML = `
     <label for="assignedModuleId">Kurs</label>
     <input type="text" name="assignedModuleId" id="assignedModuleId" value="ISEF01" required/>
     
+
+    <label for="priority">Priorität</label>
+    <select type="text" name="priority" id="priority" required>
+      <option value="LOW">Niedrig</option>
+      <option value="MEDIUM">Normal</option>
+      <option value="HIGH">Hoch</option>
+      <option value="URGENT">Dringend</option>
+    </select>
+
     <label for="category">Kategorie</label>
     <select type="text" name="category" id="category" required>
         <option disabled selected value> -- Wähle einen Wert! -- </option>

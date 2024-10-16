@@ -118,6 +118,21 @@ function TicketListPage() {
     }
   };
 
+  const translatePriority = (source) => {
+    switch (source) {
+      case 'LOW':
+        return 'Niedrig';
+      case 'MEDIUM':
+        return 'Normal';
+      case 'HIGH':
+        return 'Hoch';
+      case 'URGENT':
+        return 'Dringend';
+      default:
+        return source;
+    }
+  };
+
   const translateCategory = (category) => {
     switch (category) {
       case "CONTENT":
@@ -179,6 +194,7 @@ function TicketListPage() {
             <th className="th">E-Mail</th>
             <th className="th">Ticket von</th>
             <th className="th">Titel</th>
+            <th className="th">Priorität</th>
             <th className="th">Status</th>
             <th className="th">Kategorie</th>
             <th className="th">Beschreibung</th>
@@ -196,6 +212,7 @@ function TicketListPage() {
               <td className="td">{ticket.userEmail}</td>
               <td className="td">{ticket.userName}</td>
               <td className="td">{ticket.title}</td>
+              <td className={`td prio${ticket.priority}`}>{translatePriority(ticket.priority)}</td>
               <td className="td">{translateStatus(ticket.status)}</td> {/* Status übersetzt */}
               <td className="td">{translateCategory(ticket.category)}</td>
               <td className="td">{ticket.description}</td>
