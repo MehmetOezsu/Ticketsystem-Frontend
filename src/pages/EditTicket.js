@@ -15,6 +15,7 @@ function EditTicket() {
     title: '',
     status: '',
     category: '',
+    priority: '',
     description: '',
     assignedModuleId: '',
     ticketSource: ''
@@ -111,6 +112,21 @@ function EditTicket() {
 
   {/* Für Studenten ausgegraute Felder */}
   <div className={`form-group ${isDozent ? 'editable' : 'non-editable'}`}>
+    <label>Priorität</label>
+    <select
+      name="priority"
+      value={ticket.priority}
+      onChange={handleChange}
+      disabled={!isDozent}
+      required
+    >
+      <option value="LOW">Niedrig</option>
+      <option value="MEDIUM">Normal</option>
+      <option value="HIGH">Hoch</option>
+      <option value="URGENT">Dringend</option>
+    </select>
+  </div>
+  <div className={`form-group ${isDozent ? 'editable' : 'non-editable'}`}>
     <label>Status</label>
     <select name="status" value={ticket.status} onChange={handleChange} disabled={!isDozent} required>
       <option value="ACTIVE">Aktiv</option>
@@ -120,15 +136,16 @@ function EditTicket() {
   <div className={`form-group ${isDozent ? 'editable' : 'non-editable'}`}>
     <label>Kategorie</label>
     <select name="category" value={ticket.category} onChange={handleChange} disabled={!isDozent} required>
-      <option value="Inhaltlicher Fehler">Inhaltlicher Fehler</option>
-      <option value="Rechtschreib-/Grammatikfehler">Rechtschreib-/Grammatikfehler</option>
-      <option value="Unklare Formulierung">Unklare Formulierung</option>
-      <option value="Literaturangabe">Literaturangabe</option>
-      <option value="Tonprobleme">Tonprobleme</option>
-      <option value="Fehlende Quelle">Fehlende Quelle</option>
-      <option value="Sonstiges">Sonstiges</option>
+      <option value="CONTENT">Inhaltlicher Fehler</option>
+      <option value="GRAMMAR">Rechtschreib-/Grammatikfehler</option>
+      <option value="UNCLEAR">Unklare Formulierung</option>
+      <option value="LITERATUR">Literaturangabe</option>
+      <option value="AUDIO">Tonprobleme</option>
+      <option value="MISSING_SOURCE">Fehlende Quelle</option>
+      <option value="OTHER">Sonstiges</option>
     </select>
   </div>
+  
   <div className={`form-group ${isDozent ? 'editable' : 'non-editable'}`}>
     <label>Beschreibung</label>
     <textarea name="description" value={ticket.description} onChange={handleChange} disabled={!isDozent} required />

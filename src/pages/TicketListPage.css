@@ -54,3 +54,15 @@
   background-color: #570303;
   color: white;
 }
+
+.prioLOW{
+  background-color: lightgreen;
+}
+
+.prioHIGH{
+  background-color: orange;
+}
+
+.prioURGENT{
+  background-color: red;
+}

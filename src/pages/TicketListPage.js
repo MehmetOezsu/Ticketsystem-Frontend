@@ -12,7 +12,7 @@ function TicketListPage() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [deleteTicketId, setDeleteTicketId] = useState(null);
-  const { isAuthenticated, getAccessTokenSilently} = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently, user} = useAuth0();
   const [isDozent, setDozent] = useState(false);
 
   useEffect(() => {
@@ -118,6 +118,42 @@ function TicketListPage() {
     }
   };
 
+  const translatePriority = (source) => {
+    switch (source) {
+      case 'LOW':
+        return 'Niedrig';
+      case 'MEDIUM':
+        return 'Normal';
+      case 'HIGH':
+        return 'Hoch';
+      case 'URGENT':
+        return 'Dringend';
+      default:
+        return source;
+    }
+  };
+
+  const translateCategory = (category) => {
+    switch (category) {
+      case "CONTENT":
+          return "Inhaltlicher Fehler";
+      case "GRAMMAR":
+          return "Rechtschreib-/Grammatikfehler";
+      case "UNCLEAR":
+          return "Unklare Formulierung";
+      case "LITERATUR":
+          return "Literaturangabe";
+      case "AUDIO":
+          return "Tonprobleme";
+      case "MISSING_SOURCE":
+          return "Fehlende Quelle";
+      case "OTHER":
+          return "Sonstiges";
+      default:
+          return category;
+        }
+  }
+
   return (
     <div>
       <h1>Ticketliste</h1>
@@ -158,6 +194,7 @@ function TicketListPage() {
             <th className="th">E-Mail</th>
             <th className="th">Ticket von</th>
             <th className="th">Titel</th>
+            <th className="th">Priorität</th>
             <th className="th">Status</th>
             <th className="th">Kategorie</th>
             <th className="th">Beschreibung</th>
@@ -175,8 +212,9 @@ function TicketListPage() {
               <td className="td">{ticket.userEmail}</td>
               <td className="td">{ticket.userName}</td>
               <td className="td">{ticket.title}</td>
+              <td className={`td prio${ticket.priority}`}>{translatePriority(ticket.priority)}</td>
               <td className="td">{translateStatus(ticket.status)}</td> {/* Status übersetzt */}
-              <td className="td">{ticket.category}</td>
+              <td className="td">{translateCategory(ticket.category)}</td>
               <td className="td">{ticket.description}</td>
               <td className="td">{ticket.assignedModuleId}</td>
               <td className="td">{translateMaterial(ticket.ticketSource)}</td> {/* Material übersetzt */}
