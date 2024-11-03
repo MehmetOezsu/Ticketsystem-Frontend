@@ -31,6 +31,9 @@ function Header() {
               <li className="navItem">
                 <Link to="/demo" className="navLink">Demo</Link>
               </li>
+              <li className="navItem">
+                <Link to="/Bedienungsanleitung.pdf" className="navLink" target="_blank">Anleitung</Link>
+              </li>
             </ul>
           </nav>
         )}
